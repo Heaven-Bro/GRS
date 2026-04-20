@@ -1,16 +1,16 @@
 import axios from "axios";
 
-const API = axios.create({
-    baseURL: "http://127.0.0.1:8000/api/",
+const api = axios.create({
+    baseURL: "http://127.0.0.1:8000/api",
+    withCredentials: true,
 });
 
-// Auth APIs
-export const registerUser = (data) => {
-    return API.post("accounts/register/", data);
+export const registerUser = (userData) => {
+    return api.post("/accounts/register/", userData);
 };
 
-export const loginUser = (data) => {
-    return API.post("accounts/login/", data);
+export const loginUser = (loginData) => {
+    return api.post("/accounts/login/", loginData);
 };
 
-export default API;
+export default api;
