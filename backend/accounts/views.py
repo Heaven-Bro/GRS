@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-
+from django.contrib.auth import logout
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer, LoginSerializer
@@ -53,3 +53,8 @@ def login_user(request):
         return Response({"error": "Invalid username or password"}, status=401)
 
     return Response(serializer.errors, status=400)
+
+@api_view(['POST'])
+def logout_user(request):
+    logout(request)
+    return Response({"message": "Logout successful"}, status=status.HTTP_200_OK)

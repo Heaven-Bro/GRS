@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/api";
 
-function Login() {
+function Login({ setIsLoggedIn }) {
     const [formData, setFormData] = useState({
         username: "",
         password: "",
     });
 
     const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
     const handleChange = (event) => {
         setFormData({
@@ -24,11 +26,14 @@ function Login() {
 
             setMessage(response.data.message);
             localStorage.setItem("username", response.data.user.username);
+            setIsLoggedIn(true);
 
             setFormData({
                 username: "",
                 password: "",
             });
+
+            navigate("/");
         } catch (error) {
             console.log(error.response?.data);
             setMessage("Login failed");

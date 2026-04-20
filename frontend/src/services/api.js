@@ -13,4 +13,12 @@ export const loginUser = (loginData) => {
     return api.post("/accounts/login/", loginData);
 };
 
+export const logoutUser = () => {
+    return api.post("/accounts/logout/");
+};
+
+export const submitComplaint = (data) => {
+    return api.post("/complaints/submit/", data);
+};
+
 export default api;
