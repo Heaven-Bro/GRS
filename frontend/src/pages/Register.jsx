@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { registerUser } from "../services/api";
 
 function Register() {
     const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ function Register() {
         password: "",
     });
 
+    const [message, setMessage] = useState("");
+
     const handleChange = (event) => {
         setFormData({
             ...formData,
@@ -19,14 +22,34 @@ function Register() {
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(formData);
+
+        try {
+            const response = await registerUser(formData);
+            setMessage(response.data.message);
+
+            setFormData({
+                username: "",
+                full_name: "",
+                student_id: "",
+                department: "",
+                year: "",
+                semester: "",
+                email: "",
+                password: "",
+            });
+        } catch (error) {
+            console.log(error.response?.data);
+            setMessage("Registration failed");
+        }
     };
 
     return (
         <div>
             <h1>Register Page</h1>
+
+            {message && <p>{message}</p>}
 
             <form onSubmit={handleSubmit}>
                 <div>
