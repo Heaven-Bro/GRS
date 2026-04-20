@@ -32,7 +32,7 @@ function AppContent() {
     <div className="app-container">
       <nav className="navbar">
         <div className="nav-left">
-          <div className="logo">UGRS</div>
+          <div className="logo">GRS</div>
           <div className="nav-links">
             <Link to="/">Home</Link>
 
