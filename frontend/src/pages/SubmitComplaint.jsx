@@ -21,7 +21,7 @@ function SubmitComplaint() {
         event.preventDefault();
 
         try {
-            const response = await submitComplaint(formData);
+            await submitComplaint(formData);
             setMessage("Complaint submitted successfully");
 
             setFormData({
@@ -31,48 +31,61 @@ function SubmitComplaint() {
             });
         } catch (error) {
             console.log(error.response?.data);
-            setMessage("Submission failed. Please login first.");
+
+            if (error.response?.data?.detail) {
+                setMessage(error.response.data.detail);
+            } else {
+                setMessage("Submission failed");
+            }
         }
     };
 
     return (
-        <div>
-            <h1>Submit Complaint</h1>
+        <div className="page">
+            <div className="card">
+                <h1>Submit Complaint</h1>
+                <p className="subtitle">Fill in your grievance details carefully</p>
 
-            {message && <p>{message}</p>}
+                {message && <p className="message">{message}</p>}
 
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Title:</label>
-                    <input
-                        type="text"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                    />
-                </div>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label>Complaint Title</label>
+                        <input
+                            type="text"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleChange}
+                            placeholder="Enter complaint title"
+                        />
+                    </div>
 
-                <div>
-                    <label>Category:</label>
-                    <input
-                        type="text"
-                        name="category"
-                        value={formData.category}
-                        onChange={handleChange}
-                    />
-                </div>
+                    <div className="form-group">
+                        <label>Category</label>
+                        <input
+                            type="text"
+                            name="category"
+                            value={formData.category}
+                            onChange={handleChange}
+                            placeholder="Example: Academic, Hostel, Transport"
+                        />
+                    </div>
 
-                <div>
-                    <label>Description:</label>
-                    <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                    />
-                </div>
+                    <div className="form-group">
+                        <label>Description</label>
+                        <textarea
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            placeholder="Write the details of your complaint"
+                        />
+                    </div>
 
-                <button type="submit">Submit Complaint</button>
-            </form>
+                    <button className="primary-btn" type="submit">
+                        Submit Complaint
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }

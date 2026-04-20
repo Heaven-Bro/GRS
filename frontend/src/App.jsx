@@ -29,22 +29,32 @@ function AppContent() {
   };
 
   return (
-    <div>
-      <nav>
-        <Link to="/">Home</Link>{" "}
+    <div className="app-container">
+      <nav className="navbar">
+        <div className="nav-left">
+          <div className="logo">UGRS</div>
+          <div className="nav-links">
+            <Link to="/">Home</Link>
 
-        {!isLoggedIn && (
-          <>
-            | <Link to="/login">Login</Link>{" "}
-            | <Link to="/register">Register</Link>
-          </>
-        )}
+            {!isLoggedIn && (
+              <>
+                <Link to="/login">Login</Link>
+                <Link to="/register">Register</Link>
+              </>
+            )}
+
+            {isLoggedIn && (
+              <>
+                <Link to="/submit">Submit Complaint</Link>
+              </>
+            )}
+          </div>
+        </div>
 
         {isLoggedIn && (
-          <>
-            | <Link to="/submit">Submit Complaint</Link>{" "}
-            | <button onClick={handleLogout}>Logout</button>
-          </>
+          <button className="logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
         )}
       </nav>
 

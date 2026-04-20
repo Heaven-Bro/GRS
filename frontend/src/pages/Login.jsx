@@ -23,7 +23,6 @@ function Login({ setIsLoggedIn }) {
 
         try {
             const response = await loginUser(formData);
-
             setMessage(response.data.message);
             localStorage.setItem("username", response.data.user.username);
             setIsLoggedIn(true);
@@ -36,39 +35,51 @@ function Login({ setIsLoggedIn }) {
             navigate("/");
         } catch (error) {
             console.log(error.response?.data);
-            setMessage("Login failed");
+
+            if (error.response?.data?.error) {
+                setMessage(error.response.data.error);
+            } else {
+                setMessage("Login failed");
+            }
         }
     };
 
     return (
-        <div>
-            <h1>Login Page</h1>
+        <div className="page">
+            <div className="card">
+                <h1>Login</h1>
+                <p className="subtitle">Enter your account credentials</p>
 
-            {message && <p>{message}</p>}
+                {message && <p className="message">{message}</p>}
 
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Username:</label>
-                    <input
-                        type="text"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                    />
-                </div>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label>Username</label>
+                        <input
+                            type="text"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            placeholder="Enter username"
+                        />
+                    </div>
 
-                <div>
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                    />
-                </div>
+                    <div className="form-group">
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Enter password"
+                        />
+                    </div>
 
-                <button type="submit">Login</button>
-            </form>
+                    <button className="primary-btn" type="submit">
+                        Login
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }
