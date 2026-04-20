@@ -10,9 +10,16 @@ def register_user(request):
     serializer = RegisterSerializer(data=request.data)
 
     if serializer.is_valid():
-        serializer.save()
+        user = serializer.save()
         return Response(
-            {"message": "Registration successful", "data": serializer.data},
+            {
+                "message": "Registration successful",
+                "user": {
+                    "id": user.id,
+                    "username": user.username,
+                    "email": user.email
+                }
+            },
             status=status.HTTP_201_CREATED
         )
 

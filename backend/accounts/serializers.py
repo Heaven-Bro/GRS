@@ -4,11 +4,11 @@ from .models import StudentProfile
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    full_name = serializers.CharField()
-    student_id = serializers.CharField()
-    department = serializers.CharField()
-    year = serializers.CharField()
-    semester = serializers.CharField()
+    full_name = serializers.CharField(write_only=True)
+    student_id = serializers.CharField(write_only=True)
+    department = serializers.CharField(write_only=True)
+    year = serializers.CharField(write_only=True)
+    semester = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
@@ -30,6 +30,20 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         if not value.endswith('@student.just.edu.bd'):
             raise serializers.ValidationError("Use your university email only")
+
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("This email is already registered")
+
+        return value
+
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("This username is already taken")
+        return value
+
+    def validate_student_id(self, value):
+        if StudentProfile.objects.filter(student_id=value).exists():
+            raise serializers.ValidationError("This student ID is already registered")
         return value
 
     def create(self, validated_data):
