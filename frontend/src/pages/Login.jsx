@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/api";
 
-function Login({ setIsLoggedIn }) {
+function Login({ setIsLoggedIn, setIsAdmin }) {
     const [formData, setFormData] = useState({
         username: "",
         password: "",
@@ -23,9 +23,13 @@ function Login({ setIsLoggedIn }) {
 
         try {
             const response = await loginUser(formData);
+
             setMessage(response.data.message);
             localStorage.setItem("username", response.data.user.username);
+            localStorage.setItem("is_admin", response.data.user.is_admin);
+
             setIsLoggedIn(true);
+            setIsAdmin(response.data.user.is_admin);
 
             setFormData({
                 username: "",

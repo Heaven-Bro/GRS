@@ -37,3 +37,23 @@ def get_my_complaints(request):
     complaints = Complaint.objects.filter(user=request.user)
     serializer = ComplaintSerializer(complaints, many=True)
     return Response(serializer.data)
+
+@api_view(['PATCH'])
+@authentication_classes([CsrfExemptSessionAuthentication])
+@permission_classes([IsAdminUser])
+def update_complaint_status(request, complaint_id):
+    try:
+        complaint = Complaint.objects.get(id=complaint_id)
+    except Complaint.DoesNotExist:
+        return Response({"error": "Complaint not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    new_status = request.data.get("status")
+
+    if not new_status:
+        return Response({"error": "Status is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    complaint.status = new_status
+    complaint.save()
+
+    serializer = ComplaintSerializer(complaint)
+    return Response(serializer.data, status=status.HTTP_200_OK)

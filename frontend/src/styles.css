@@ -258,3 +258,128 @@ input[type="file"] {
     font-size: 14px;
     line-height: 1.7;
 }
+
+.complaint-form {
+    width: 100%;
+}
+
+.complaint-form .form-group {
+    margin-bottom: 20px;
+}
+
+.complaint-form textarea,
+.complaint-form select,
+.complaint-form input[type="text"] {
+    width: 100%;
+}
+
+.file-upload-group {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.file-upload-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #1e3a5f;
+    font-size: 15px;
+}
+
+.file-upload-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.file-upload-row input[type="file"] {
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-size: 15px;
+}
+
+.anonymous-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.anonymous-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.anonymous-row label {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #334155;
+    cursor: pointer;
+}
+
+.note-box {
+    margin-top: 24px;
+    padding-top: 10px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #374151;
+}
+
+.note-box strong {
+    display: inline-block;
+    margin-bottom: 6px;
+}
+
+.note-box .required-star {
+    color: red;
+    font-weight: bold;
+}
+
+.note-box .warning-text {
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .file-upload-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .anonymous-row {
+        align-items: flex-start;
+    }
+}
+
+.complaint-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+}
+
+.complaint-table th,
+.complaint-table td {
+    border: 1px solid #cbd5e1;
+    padding: 12px;
+    text-align: left;
+    vertical-align: top;
+    font-size: 14px;
+}
+
+.complaint-table th {
+    background: #1e3a8a;
+    color: white;
+    font-weight: 600;
+}
+
+.complaint-table tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.complaint-table tr:hover {
+    background: #e0f2fe;
+}

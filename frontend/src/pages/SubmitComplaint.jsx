@@ -52,12 +52,11 @@ function SubmitComplaint() {
         submitData.append("title", finalCategory);
         submitData.append("category", finalCategory);
         submitData.append("description", formData.description);
+        submitData.append("is_anonymous", formData.is_anonymous);
 
         if (formData.document) {
             submitData.append("document", formData.document);
         }
-
-        submitData.append("is_anonymous", formData.is_anonymous);
 
         try {
             await submitComplaint(submitData);
@@ -89,7 +88,7 @@ function SubmitComplaint() {
 
                 {message && <p className="message">{message}</p>}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="complaint-form">
                     <div className="form-group">
                         <label>Grievance Type *</label>
                         <select
@@ -129,26 +128,28 @@ function SubmitComplaint() {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="file-upload-group">
                         <label>Add Supporting Document (If any)</label>
-                        <input
-                            type="file"
-                            name="document"
-                            onChange={handleChange}
-                            accept=".jpg,.jpeg,.png,.pdf,.mp4,.flv,.mkv"
-                        />
-                    </div>
 
-                    <div className="form-group checkbox-group">
-                        <label>
+                        <div className="file-upload-row">
+                            <input
+                                type="file"
+                                name="document"
+                                onChange={handleChange}
+                                accept=".jpg,.jpeg,.png,.pdf,.mp4,.flv,.mkv"
+                            />
+                        </div>
+
+                        <div className="anonymous-row">
                             <input
                                 type="checkbox"
+                                id="anonymous"
                                 name="is_anonymous"
                                 checked={formData.is_anonymous}
                                 onChange={handleChange}
-                            />{" "}
-                            File complaint anonymously
-                        </label>
+                            />
+                            <label htmlFor="anonymous">File complaint anonymously</label>
+                        </div>
                     </div>
 
                     <button className="primary-btn" type="submit">
@@ -156,14 +157,14 @@ function SubmitComplaint() {
                     </button>
                 </form>
 
-                <div className="info-box" style={{ marginTop: "20px", textAlign: "left" }}>
+                <div className="note-box">
                     <strong>Note:</strong>
                     <br />
-                    * fields are mandatory to be filled.
+                    <span className="required-star">*</span> are mandatory to be filled.
                     <br />
-                    Supported document types: .jpeg, .jpg, .png, .pdf, .mp4, .flv, .mkv
+                    <span className="warning-text">Supported Document types:</span> ".jpeg, .jpg, .png, .pdf, .mp4, .flv, .mkv". Please upload the file of this type only.
                     <br />
-                    Do not use offensive language.
+                    <span className="warning-text">Don't use Offensive language.</span> If you are found doing so, strict actions will be taken against you.
                 </div>
             </div>
         </div>

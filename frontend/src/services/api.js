@@ -20,5 +20,11 @@ export const logoutUser = () => {
 export const submitComplaint = (data) => {
     return api.post("/complaints/submit/", data);
 };
+export const getAllComplaints = () => {
+    return api.get("/complaints/all/");
+};
 
+export const updateComplaintStatus = (complaintId, status) => {
+    return api.patch(`/complaints/update-status/${complaintId}/`, { status });
+};
 export default api;

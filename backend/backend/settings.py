@@ -31,19 +31,29 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    
-    'corsheaders',
-    'rest_framework',
-    'accounts',
-    'complaints',
-]
+    "jazzmin",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 
+    "rest_framework",
+    "corsheaders",
+
+    "accounts",
+    "complaints",
+]
+JAZZMIN_SETTINGS = {
+    "site_title": "UGRS Admin",
+    "site_header": "UGRS Administration",
+    "site_brand": "UGRS",
+    "welcome_sign": "Welcome to the University Grievance Redress System Admin Panel",
+    "copyright": "UGRS Project",
+    "show_sidebar": True,
+    "navigation_expanded": True,
+}
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -54,6 +64,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 CORS_ALLOW_CREDENTIALS = True
 
