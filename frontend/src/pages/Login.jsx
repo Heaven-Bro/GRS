@@ -4,7 +4,7 @@ import { loginUser } from "../services/api";
 
 function Login({ setIsLoggedIn, setIsAdmin }) {
     const [formData, setFormData] = useState({
-        username: "",
+        gmail: "",
         password: "",
     });
 
@@ -25,7 +25,9 @@ function Login({ setIsLoggedIn, setIsAdmin }) {
             const response = await loginUser(formData);
 
             setMessage(response.data.message);
+
             localStorage.setItem("username", response.data.user.username);
+            localStorage.setItem("email", response.data.user.email);
             localStorage.setItem("is_admin", response.data.user.is_admin);
 
             setIsLoggedIn(true);
@@ -60,11 +62,11 @@ function Login({ setIsLoggedIn, setIsAdmin }) {
                     <div className="form-group">
                         <label>Username</label>
                         <input
-                            type="text"
-                            name="username"
-                            value={formData.username}
+                            type="email"
+                            name="email"
+                            value={formData.email}
                             onChange={handleChange}
-                            placeholder="Enter username"
+                            placeholder="Enter email"
                         />
                     </div>
 

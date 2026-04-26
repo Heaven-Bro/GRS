@@ -3,13 +3,13 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-
+from django.contrib.auth.models import User
 from .serializers import RegisterSerializer, LoginSerializer
 from .authentication import CsrfExemptSessionAuthentication
 
 
 @api_view(['POST'])
-@authentication_classes([])   # no SessionAuthentication here
+@authentication_classes([])    
 @permission_classes([AllowAny])
 def register_user(request):
     serializer = RegisterSerializer(data=request.data)
@@ -32,16 +32,24 @@ def register_user(request):
 
 
 @api_view(['POST'])
-@authentication_classes([])   # no SessionAuthentication here
+@authentication_classes([])
 @permission_classes([AllowAny])
 def login_user(request):
     serializer = LoginSerializer(data=request.data)
 
     if serializer.is_valid():
-        username = serializer.validated_data['username']
+        email = serializer.validated_data['email']
         password = serializer.validated_data['password']
 
-        user = authenticate(username=username, password=password)
+        try:
+            user_obj = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response(
+                {"error": "Invalid email or password"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        user = authenticate(username=user_obj.username, password=password)
 
         if user is not None:
             login(request, user)
@@ -59,7 +67,7 @@ def login_user(request):
             )
 
         return Response(
-            {"error": "Invalid username or password"},
+            {"error": "Invalid email or password"},
             status=status.HTTP_401_UNAUTHORIZED
         )
 

@@ -28,8 +28,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def validate_email(self, value):
-        if not value.endswith('@student.just.edu.bd'):
-            raise serializers.ValidationError("Use your university email only")
+        if not value.endswith('@student.just.edu.bd') and not value.endswith('@just.edu.bd'):
+            raise serializers.ValidationError("Use university email only")
 
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("This email is already registered")
@@ -71,5 +71,5 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
