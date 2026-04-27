@@ -134,6 +134,22 @@ a {
     resize: vertical;
 }
 
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    font-size: 15px;
+    background: white;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-group select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
 .primary-btn {
     width: 100%;
     background: #2563eb;
@@ -382,4 +398,18 @@ input[type="file"] {
 
 .complaint-table tr:hover {
     background: #e0f2fe;
+}
+
+.profile-info {
+    margin-top: 20px;
+    display: grid;
+    gap: 12px;
+}
+
+.profile-info p {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 15px;
 }

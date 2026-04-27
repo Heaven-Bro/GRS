@@ -5,6 +5,10 @@ const api = axios.create({
     withCredentials: true,
 });
 
+export const getProfile = () => {
+    return api.get("/accounts/profile/");
+};
+
 export const registerUser = (userData) => {
     return api.post("/accounts/register/", userData);
 };

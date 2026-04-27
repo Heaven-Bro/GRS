@@ -76,12 +76,22 @@ function Register() {
 
                     <div className="form-group">
                         <label>Year</label>
-                        <input type="text" name="year" value={formData.year} onChange={handleChange} />
+                        <select name="year" value={formData.year} onChange={handleChange}>
+                            <option value="">Select Year</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option> 
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
                     </div>
 
                     <div className="form-group">
                         <label>Semester</label>
-                        <input type="text" name="semester" value={formData.semester} onChange={handleChange} />
+                        <select name="semester" value={formData.semester} on onChange={handleChange}>
+                            <option value="">Select Semester</option>
+                            <option value="1">1st Semester</option>
+                            <option value="2">2nd Semester</option>
+                        </select>                    
                     </div>
 
                     <div className="form-group">

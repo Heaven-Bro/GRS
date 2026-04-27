@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import SubmitComplaint from "./pages/SubmitComplaint";
 import { logoutUser } from "./services/api";
 import AdminComplaints from "./pages/AdminComplaints";
+import Profile from "./pages/Profile";
 
 function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -58,6 +59,10 @@ function AppContent() {
               </>
             )}
 
+            {isLoggedIn && (
+              <Link to="/profile"> Profile</Link>
+            )}
+
             {isLoggedIn && isAdmin && (
               <Link to="/admin-complaints">Admin Panel</Link>
             )}
@@ -85,6 +90,7 @@ function AppContent() {
         <Route path="/register" element={<Register />} />
         <Route path="/submit" element={<SubmitComplaint />} />
         <Route path="/admin-complaints" element={<AdminComplaints />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );
