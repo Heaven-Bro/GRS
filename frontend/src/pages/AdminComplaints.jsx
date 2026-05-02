@@ -31,33 +31,38 @@ function AdminComplaints() {
                     <table className="complaint-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>SL</th>
+                                <th>Name</th>
+                                <th>Student ID</th>
+                                <th>Department</th>
+                                <th>Session</th>
                                 <th>Title</th>
                                 <th>Category</th>
                                 <th>Description</th>
                                 <th>Status</th>
-                                <th>User</th>
-                                <th>Anonymous</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             {complaints.length > 0 ? (
-                                complaints.map((complaint) => (
-                                    <tr key={complaint.id}>
-                                        <td>{complaint.id}</td>
-                                        <td>{complaint.title}</td>
-                                        <td>{complaint.category}</td>
-                                        <td>{complaint.description}</td>
-                                        <td>{complaint.status}</td>
-                                        <td>{complaint.user}</td>
-                                        <td>{complaint.is_anonymous ? "Yes" : "No"}</td>
-                                        <td>{new Date(complaint.created_at).toLocaleString()}</td>
+                                complaints.map((c, index) => (
+                                    <tr key={c.id}>
+                                        <td>{index + 1}</td>
+                                        <td>{c.full_name}</td>
+                                        <td>{c.student_id}</td>
+                                        <td>{c.department}</td>
+                                        <td>{c.session}</td>
+                                        <td>{c.title}</td>
+                                        <td>{c.category}</td>
+                                        <td>{c.description}</td>
+                                        <td>{c.status}</td>
+                                        <td>{new Date(c.created_at).toLocaleString()}</td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="8" style={{ textAlign: "center" }}>
+                                    <td colSpan="10" style={{ textAlign: "center" }}>
                                         No complaints found
                                     </td>
                                 </tr>

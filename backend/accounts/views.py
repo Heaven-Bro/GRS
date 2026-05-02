@@ -83,14 +83,26 @@ def logout_user(request):
         status=status.HTTP_200_OK
     )
 
-
 @api_view(['GET'])
 @authentication_classes([CsrfExemptSessionAuthentication])
 def profile_user(request):
     if not request.user.is_authenticated:
-        return Response({"detail": "Authentication credentials were not provided."}, status=403)
-    
-    profile = StudentProfile.objects.get(user=request.user)
+        return Response(
+            {"detail": "Authentication credentials were not provided."},
+            status=403
+        )
+
+    profile = StudentProfile.objects.filter(user=request.user).first()
+
+    if not profile:
+        profile = StudentProfile.objects.create(
+            user=request.user,
+            full_name=request.user.username,
+            student_id=f"UNKNOWN-{request.user.id}",
+            department="UNKNOWN",
+            year="UNKNOWN",
+            semester="UNKNOWN"
+        )
 
     return Response({
         "id": request.user.id,
@@ -100,6 +112,6 @@ def profile_user(request):
         "student_id": profile.student_id,
         "department": profile.department,
         "year": profile.year,
-        "semister": profile.semester,
+        "semester": profile.semester,
         "is_admin": request.user.is_staff,
     })

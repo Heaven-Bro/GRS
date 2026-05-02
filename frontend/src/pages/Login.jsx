@@ -4,7 +4,7 @@ import { loginUser } from "../services/api";
 
 function Login({ setIsLoggedIn, setIsAdmin }) {
     const [formData, setFormData] = useState({
-        gmail: "",
+        email: "",
         password: "",
     });
 
@@ -34,14 +34,12 @@ function Login({ setIsLoggedIn, setIsAdmin }) {
             setIsAdmin(response.data.user.is_admin);
 
             setFormData({
-                username: "",
+                email: "",
                 password: "",
             });
 
             navigate("/");
         } catch (error) {
-            console.log(error.response?.data);
-
             if (error.response?.data?.error) {
                 setMessage(error.response.data.error);
             } else {
@@ -60,13 +58,13 @@ function Login({ setIsLoggedIn, setIsAdmin }) {
 
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label>Username</label>
+                        <label>Email</label>   {/* ✅ FIXED */}
                         <input
                             type="email"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            placeholder="Enter email"
+                            placeholder="Enter your university email"
                         />
                     </div>
 
