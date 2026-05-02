@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../services/api";
 
 function Login({ setIsLoggedIn, setIsAdmin }) {
@@ -56,15 +56,21 @@ function Login({ setIsLoggedIn, setIsAdmin }) {
 
                 {message && <p className="message">{message}</p>}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} autoComplete="off">
+
+                    {/* fake fields to stop autofill */}
+                    <input type="text" name="fakeuser" style={{ display: "none" }} />
+                    <input type="password" name="fakepass" style={{ display: "none" }} />
+
                     <div className="form-group">
-                        <label>Email</label>   {/* ✅ FIXED */}
+                        <label>Email</label>
                         <input
                             type="email"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            placeholder="Enter your university email"
+                            placeholder="example@student.just.edu.bd"
+                            autoComplete="off"
                         />
                     </div>
 
@@ -76,12 +82,21 @@ function Login({ setIsLoggedIn, setIsAdmin }) {
                             value={formData.password}
                             onChange={handleChange}
                             placeholder="Enter password"
+                            autoComplete="new-password"
                         />
                     </div>
 
-                    <button className="primary-btn" type="submit">
-                        Login
+                    {/* ✅ BIG BUTTON */}
+                    <button className="primary-btn big-btn" type="submit">
+                        → Sign In
                     </button>
+
+                    {/* ✅ TEXT BELOW BUTTON */}
+                    <p className="auth-switch-text">
+                        Don’t have an account?{" "}
+                        <Link to="/register">Create account</Link>
+                    </p>
+
                 </form>
             </div>
         </div>

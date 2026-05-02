@@ -83,26 +83,29 @@ def logout_user(request):
         status=status.HTTP_200_OK
     )
 
-@api_view(['GET'])
+@api_view(['GET', 'PATCH'])
 @authentication_classes([CsrfExemptSessionAuthentication])
 def profile_user(request):
     if not request.user.is_authenticated:
-        return Response(
-            {"detail": "Authentication credentials were not provided."},
-            status=403
-        )
+        return Response({"detail": "Authentication credentials were not provided."}, status=403)
 
-    profile = StudentProfile.objects.filter(user=request.user).first()
+    profile, created = StudentProfile.objects.get_or_create(
+        user=request.user,
+        defaults={
+            "full_name": request.user.username,
+            "student_id": f"UNKNOWN-{request.user.id}",
+            "department": "UNKNOWN",
+            "year": "UNKNOWN",
+            "semester": "UNKNOWN",
+        }
+    )
 
-    if not profile:
-        profile = StudentProfile.objects.create(
-            user=request.user,
-            full_name=request.user.username,
-            student_id=f"UNKNOWN-{request.user.id}",
-            department="UNKNOWN",
-            year="UNKNOWN",
-            semester="UNKNOWN"
-        )
+    if request.method == "PATCH":
+        profile.full_name = request.data.get("full_name", profile.full_name)
+        profile.department = request.data.get("department", profile.department)
+        profile.year = request.data.get("year", profile.year)
+        profile.semester = request.data.get("semester", profile.semester)
+        profile.save()
 
     return Response({
         "id": request.user.id,

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { registerUser } from "../services/api";
 
 function Register() {
@@ -16,9 +17,12 @@ function Register() {
     const [message, setMessage] = useState("");
 
     const handleChange = (event) => {
+        const { dataset, value } = event.target;
+        const fieldName = dataset.field;
+
         setFormData({
             ...formData,
-            [event.target.name]: event.target.value,
+            [fieldName]: value,
         });
     };
 
@@ -41,7 +45,14 @@ function Register() {
             });
         } catch (error) {
             console.log(error.response?.data);
-            setMessage("Registration failed");
+
+            const data = error.response?.data;
+            if (data) {
+                const firstError = Object.values(data)[0];
+                setMessage(Array.isArray(firstError) ? firstError[0] : "Registration failed");
+            } else {
+                setMessage("Registration failed");
+            }
         }
     };
 
@@ -53,33 +64,68 @@ function Register() {
 
                 {message && <p className="message">{message}</p>}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} autoComplete="off">
+                    <input type="text" name="fakeuser" autoComplete="off" style={{ display: "none" }} />
+                    <input type="password" name="fakepass" autoComplete="new-password" style={{ display: "none" }} />
+
                     <div className="form-group">
                         <label>Username</label>
-                        <input type="text" name="username" value={formData.username} onChange={handleChange} />
+                        <input
+                            type="text"
+                            name="reg_user_field"
+                            data-field="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            autoComplete="off"
+                            placeholder="Choose username"
+                        />
                     </div>
 
                     <div className="form-group">
                         <label>Full Name</label>
-                        <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} />
+                        <input
+                            type="text"
+                            name="reg_full_name_field"
+                            data-field="full_name"
+                            value={formData.full_name}
+                            onChange={handleChange}
+                            autoComplete="off"
+                            placeholder="Enter full name"
+                        />
                     </div>
 
                     <div className="form-group">
                         <label>Student ID</label>
-                        <input type="text" name="student_id" value={formData.student_id} onChange={handleChange} />
+                        <input
+                            type="text"
+                            name="reg_student_id_field"
+                            data-field="student_id"
+                            value={formData.student_id}
+                            onChange={handleChange}
+                            autoComplete="off"
+                            placeholder="Enter student ID"
+                        />
                     </div>
 
                     <div className="form-group">
                         <label>Department</label>
-                        <input type="text" name="department" value={formData.department} onChange={handleChange} />
+                        <input
+                            type="text"
+                            name="reg_department_field"
+                            data-field="department"
+                            value={formData.department}
+                            onChange={handleChange}
+                            autoComplete="off"
+                            placeholder="Example: CSE"
+                        />
                     </div>
 
                     <div className="form-group">
                         <label>Year</label>
-                        <select name="year" value={formData.year} onChange={handleChange}>
+                        <select data-field="year" value={formData.year} onChange={handleChange}>
                             <option value="">Select Year</option>
                             <option value="1">1st Year</option>
-                            <option value="2">2nd Year</option> 
+                            <option value="2">2nd Year</option>
                             <option value="3">3rd Year</option>
                             <option value="4">4th Year</option>
                         </select>
@@ -87,26 +133,46 @@ function Register() {
 
                     <div className="form-group">
                         <label>Semester</label>
-                        <select name="semester" value={formData.semester} on onChange={handleChange}>
+                        <select data-field="semester" value={formData.semester} onChange={handleChange}>
                             <option value="">Select Semester</option>
                             <option value="1">1st Semester</option>
                             <option value="2">2nd Semester</option>
-                        </select>                    
+                        </select>
                     </div>
 
                     <div className="form-group">
                         <label>University Email</label>
-                        <input type="email" name="email" value={formData.email} onChange={handleChange} />
+                        <input
+                            type="email"
+                            name="reg_email_field"
+                            data-field="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            autoComplete="off"
+                            placeholder="example@student.just.edu.bd"
+                        />
                     </div>
 
                     <div className="form-group">
                         <label>Password</label>
-                        <input type="password" name="password" value={formData.password} onChange={handleChange} />
+                        <input
+                            type="password"
+                            name="reg_pass_field"
+                            data-field="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            autoComplete="new-password"
+                            placeholder="Create password"
+                        />
                     </div>
 
                     <button className="primary-btn" type="submit">
-                        Register
+                        Create Account
                     </button>
+
+                    <p className="auth-switch-text">
+                        Already have an account? <Link to="/login">Sign in</Link>
+                    </p>
                 </form>
             </div>
         </div>

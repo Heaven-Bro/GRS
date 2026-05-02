@@ -9,6 +9,10 @@ export const getProfile = () => {
     return api.get("/accounts/profile/");
 };
 
+export const updateProfile = (data) => {
+    return api.patch("/accounts/profile/", data);
+};
+
 export const registerUser = (userData) => {
     return api.post("/accounts/register/", userData);
 };
@@ -24,6 +28,7 @@ export const logoutUser = () => {
 export const submitComplaint = (data) => {
     return api.post("/complaints/submit/", data);
 };
+
 export const getAllComplaints = () => {
     return api.get("/complaints/all/");
 };
@@ -31,4 +36,5 @@ export const getAllComplaints = () => {
 export const updateComplaintStatus = (complaintId, status) => {
     return api.patch(`/complaints/update-status/${complaintId}/`, { status });
 };
+
 export default api;
