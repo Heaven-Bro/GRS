@@ -576,3 +576,10 @@ input[type="file"] {
         width: 100%;
     }
 }
+
+.section-title {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #1e3a8a;
+    font-weight: bold;
+}

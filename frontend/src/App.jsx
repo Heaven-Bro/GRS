@@ -1,17 +1,17 @@
-import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SubmitComplaint from "./pages/SubmitComplaint";
-import { logoutUser } from "./services/api";
 import AdminComplaints from "./pages/AdminComplaints";
 import Profile from "./pages/Profile";
+import Navbar from "./components/Navbar";
 
 function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const username = localStorage.getItem("username");
@@ -19,65 +19,22 @@ function AppContent() {
 
     if (username) {
       setIsLoggedIn(true);
+      setIsAdmin(adminStatus);
     }
-
-    setIsAdmin(adminStatus);
   }, []);
-
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
-      localStorage.removeItem("username");
-      localStorage.removeItem("is_admin");
-      setIsLoggedIn(false);
-      setIsAdmin(false);
-      navigate("/");
-    } catch (error) {
-      console.log(error.response?.data);
-    }
-  };
 
   return (
     <div className="app-container">
-      <nav className="navbar">
-        <div className="nav-left">
-          <div className="logo">GRS</div>
-
-          <div className="nav-links">
-            <Link to="/">Home</Link>
-
-            {!isLoggedIn && (
-              <>
-                <Link to="/login">Login</Link>
-                <Link to="/register">Register</Link>
-              </>
-            )}
-
-            {isLoggedIn && (
-              <>
-                <Link to="/submit">Submit Complaint</Link>
-              </>
-            )}
-
-            {isLoggedIn && (
-              <Link to="/profile"> Profile</Link>
-            )}
-
-            {isLoggedIn && isAdmin && (
-              <Link to="/admin-complaints">Admin Panel</Link>
-            )}
-          </div>
-        </div>
-
-        {isLoggedIn && (
-          <button className="logout-btn" onClick={handleLogout}>
-            Logout
-          </button>
-        )}
-      </nav>
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        isAdmin={isAdmin}
+        setIsLoggedIn={setIsLoggedIn}
+        setIsAdmin={setIsAdmin}
+      />
 
       <Routes>
         <Route path="/" element={<Home />} />
+
         <Route
           path="/login"
           element={
@@ -87,10 +44,23 @@ function AppContent() {
             />
           }
         />
+
         <Route path="/register" element={<Register />} />
-        <Route path="/submit" element={<SubmitComplaint />} />
-        <Route path="/admin-complaints" element={<AdminComplaints />} />
-        <Route path="/profile" element={<Profile />} />
+
+        <Route
+          path="/submit"
+          element={isLoggedIn && !isAdmin ? <SubmitComplaint /> : <Home />}
+        />
+
+        <Route
+          path="/profile"
+          element={isLoggedIn && !isAdmin ? <Profile /> : <Home />}
+        />
+
+        <Route
+          path="/admin-complaints"
+          element={isLoggedIn && isAdmin ? <AdminComplaints /> : <Home />}
+        />
       </Routes>
     </div>
   );

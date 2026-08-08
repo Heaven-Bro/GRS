@@ -1,15 +1,18 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth.models import User
+
 from .serializers import RegisterSerializer, LoginSerializer
 from .authentication import CsrfExemptSessionAuthentication
 from .models import StudentProfile
 
+
 @api_view(['POST'])
-@authentication_classes([])    
+@authentication_classes([])
 @permission_classes([AllowAny])
 def register_user(request):
     serializer = RegisterSerializer(data=request.data)
@@ -22,10 +25,10 @@ def register_user(request):
                 "user": {
                     "id": user.id,
                     "username": user.username,
-                    "email": user.email
-                }
+                    "email": user.email,
+                },
             },
-            status=status.HTTP_201_CREATED
+            status=status.HTTP_201_CREATED,
         )
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -38,21 +41,22 @@ def login_user(request):
     serializer = LoginSerializer(data=request.data)
 
     if serializer.is_valid():
-        email = serializer.validated_data['email']
-        password = serializer.validated_data['password']
+        email = serializer.validated_data["email"]
+        password = serializer.validated_data["password"]
 
         try:
             user_obj = User.objects.get(email=email)
         except User.DoesNotExist:
             return Response(
                 {"error": "Invalid email or password"},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         user = authenticate(username=user_obj.username, password=password)
 
         if user is not None:
             login(request, user)
+
             return Response(
                 {
                     "message": "Login successful",
@@ -60,15 +64,15 @@ def login_user(request):
                         "id": user.id,
                         "username": user.username,
                         "email": user.email,
-                        "is_admin": user.is_staff
-                    }
+                        "is_admin": user.is_staff,
+                    },
                 },
-                status=status.HTTP_200_OK
+                status=status.HTTP_200_OK,
             )
 
         return Response(
             {"error": "Invalid email or password"},
-            status=status.HTTP_401_UNAUTHORIZED
+            status=status.HTTP_401_UNAUTHORIZED,
         )
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -80,14 +84,18 @@ def logout_user(request):
     logout(request)
     return Response(
         {"message": "Logout successful"},
-        status=status.HTTP_200_OK
+        status=status.HTTP_200_OK,
     )
+
 
 @api_view(['GET', 'PATCH'])
 @authentication_classes([CsrfExemptSessionAuthentication])
 def profile_user(request):
     if not request.user.is_authenticated:
-        return Response({"detail": "Authentication credentials were not provided."}, status=403)
+        return Response(
+            {"detail": "Authentication credentials were not provided."},
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
     profile, created = StudentProfile.objects.get_or_create(
         user=request.user,
@@ -97,7 +105,7 @@ def profile_user(request):
             "department": "UNKNOWN",
             "year": "UNKNOWN",
             "semester": "UNKNOWN",
-        }
+        },
     )
 
     if request.method == "PATCH":
@@ -105,16 +113,45 @@ def profile_user(request):
         profile.department = request.data.get("department", profile.department)
         profile.year = request.data.get("year", profile.year)
         profile.semester = request.data.get("semester", profile.semester)
+
+        profile.current_address = request.data.get(
+            "current_address",
+            profile.current_address,
+        )
+        profile.permanent_address = request.data.get(
+            "permanent_address",
+            profile.permanent_address,
+        )
+        profile.blood_group = request.data.get(
+            "blood_group",
+            profile.blood_group,
+        )
+        profile.phone_number = request.data.get(
+            "phone_number",
+            profile.phone_number,
+        )
+        profile.date_of_birth = request.data.get(
+            "date_of_birth",
+            profile.date_of_birth,
+        )
+
         profile.save()
 
-    return Response({
-        "id": request.user.id,
-        "username": request.user.username,
-        "email": request.user.email,
-        "full_name": profile.full_name,
-        "student_id": profile.student_id,
-        "department": profile.department,
-        "year": profile.year,
-        "semester": profile.semester,
-        "is_admin": request.user.is_staff,
-    })
+    return Response(
+        {
+            "id": request.user.id,
+            "username": request.user.username,
+            "email": request.user.email,
+            "full_name": profile.full_name,
+            "student_id": profile.student_id,
+            "department": profile.department,
+            "year": profile.year,
+            "semester": profile.semester,
+            "current_address": profile.current_address,
+            "permanent_address": profile.permanent_address,
+            "blood_group": profile.blood_group,
+            "phone_number": profile.phone_number,
+            "date_of_birth": profile.date_of_birth,
+            "is_admin": request.user.is_staff,
+        }
+    )
